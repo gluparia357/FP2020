@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ClaseListas;
+using ListaNodo;
+
+namespace TP_Listas
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        NodoSimple nodoseleccionado;
+
+        ListaSimple unaLista = new ListaSimple();
+
+        private void Label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GenerarLista()
+        {
+            this.lstlista.Items.Clear();
+            Listar(unaLista.NodoInicial);
+        }
+        private void Listar(NodoSimple unNodo)
+        {
+            if (unNodo != null)
+            {
+                lstlista.Items.Add(unNodo); // +", "+ unNodo.Detalle + ", " + unNodo.Dato2 + ", " + unNodo.Dato3);
+                
+                if (unNodo.Siguiente != null)
+                    Listar(unNodo.Siguiente);
+            }
+        }
+
+        private void Btnagregarp_Click(object sender, EventArgs e)
+        {
+            unaLista.AgregarNodoAlInicio(this.txtpaciente.Text, this.txtdato2.Text, this.txtdato3.Text,"");
+            GenerarLista();
+        }
+
+        private void Lstlista_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            GenerarLista();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            this.txtpaciente.Text = "";
+            this.txtdato2.Text = "";
+            this.txtdato3.Text = "";
+
+        }
+
+        private void Btnagregaru_Click(object sender, EventArgs e)
+        {
+            unaLista.AgregarNodoAlFinal(this.txtpaciente.Text, this.txtdato2.Text, this.txtdato3.Text, "");
+            GenerarLista();
+        }
+
+        private void Btnquitarp_Click(object sender, EventArgs e)
+        {
+            unaLista.QuitarPrimerNodo();
+            GenerarLista();
+        }
+
+        private void Btnquitaru_Click(object sender, EventArgs e)
+        {
+            unaLista.QuitarUltimoNodo();
+            GenerarLista();
+        }
+
+        private void Btnquitars_Click(object sender, EventArgs e)
+        {
+
+            if (nodoseleccionado != null)
+            {
+                unaLista.QuitarNodoPosicion(nodoseleccionado.Numero);
+                GenerarLista();
+                
+            }
+
+            else
+                MessageBox.Show("Debe seleccionar un nodo de la lista o no podrá quitarlo.");
+           
+        }
+
+        private void Lstlista_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            nodoseleccionado = (NodoSimple) this.lstlista.SelectedItem;
+        }
+
+        private void Btnaddantes_Click(object sender, EventArgs e)
+        {
+            nodoseleccionado = (NodoSimple)this.lstlista.SelectedItem;
+            if (nodoseleccionado != null)
+            {
+                unaLista.AgregarAntesDelSeleccionado(nodoseleccionado, this.txtpaciente.Text, this.txtdato2.Text, this.txtdato3.Text, "")   ;
+                GenerarLista();
+            }
+
+            else
+                MessageBox.Show("Debe seleccionar un nodo de la lista o no podrá agregar uno nuevo.");
+
+        }
+
+        private void Btnadddespues_Click(object sender, EventArgs e)
+        {
+            nodoseleccionado = (NodoSimple)this.lstlista.SelectedItem;
+            if (nodoseleccionado != null)
+            {
+                unaLista.AgregarDespuesDelSeleccionado(nodoseleccionado, this.txtpaciente.Text, this.txtdato2.Text, this.txtdato3.Text, "");
+                GenerarLista();
+            }
+
+            else
+                MessageBox.Show("Debe seleccionar un nodo de la lista o no podrá agregar uno nuevo.");
+
+        }
+
+        private void Btnmodificar_Click(object sender, EventArgs e)
+        {
+            nodoseleccionado.Dato2 = txtdato2.Text;
+            nodoseleccionado.Dato3 = txtdato3.Text;
+            nodoseleccionado.Detalle = txtpaciente.Text;
+            this.btncargar.Enabled = true;
+            this.btnmodificar.Enabled = false;
+            GenerarLista();
+        }
+
+        private void Button1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Btncargar_Click(object sender, EventArgs e)
+        {
+            nodoseleccionado = (NodoSimple)this.lstlista.SelectedItem;
+            txtpaciente.Text = nodoseleccionado.Detalle;
+            txtdato2.Text = nodoseleccionado.Dato2;
+            txtdato3.Text = nodoseleccionado.Dato3;
+            this.btncargar.Enabled = false;
+            this.btnmodificar.Enabled = true;
+        }
+    }
+}
